@@ -164,14 +164,34 @@ de OCI:
 4. Copiar `deploy/nginx.conf` a `/etc/nginx/sites-available/` (o
    `conf.d/`), generar un certificado SSL y recargar nginx:
    `sudo nginx -t && sudo systemctl reload nginx`.
-5. Abrir los puertos 80/443 en la lista de seguridad ("Security List") de
-   la VCN de OCI.
+5. Abrir los puertos 80/443 en dos lugares (los dos son necesarios en OCI):
+   - La lista de seguridad ("Security List") de la VCN, agregando reglas
+     de ingreso con source `0.0.0.0/0` para los puertos 80 y 443.
+   - El firewall del sistema operativo (`iptables`), que en las imágenes
+     Ubuntu de OCI viene bloqueando todo excepto el puerto 22 por
+     defecto:
+     ```bash
+     sudo iptables -I INPUT 5 -m state --state NEW -p tcp --dport 443 -j ACCEPT
+     sudo iptables -I INPUT 5 -m state --state NEW -p tcp --dport 80 -j ACCEPT
+     sudo netfilter-persistent save
+     ```
+     Importante: estas reglas deben insertarse **antes** de la regla
+     `REJECT` existente (revisar con `sudo iptables -L INPUT -n --line-numbers`),
+     si no, nunca se aplican.
 
-**URL pública:** _(completar con la URL de tu instancia una vez desplegada)_
+**URL pública:** https://161.153.207.117
+(certificado autofirmado: el navegador muestra una advertencia de
+seguridad al entrar, es esperable y se puede continuar sin problema)
 
-**Evidencia del deploy:** _(agregar acá la captura de pantalla del servicio
-corriendo, por ejemplo `sudo systemctl status pdf-qa-assistant` en la
-instancia de OCI)_
+**Evidencia del deploy:**
+
+Chat funcionando en la URL pública, respondiendo con fuentes citadas:
+
+![Chat funcionando en producción](docs/deploy-chat-funcionando.png)
+
+Servicio systemd activo en la instancia de OCI:
+
+![Servicio systemd activo](docs/deploy-systemctl-status.png)
 
 ## Notas
 
