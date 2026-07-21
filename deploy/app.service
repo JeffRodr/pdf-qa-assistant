@@ -1,0 +1,20 @@
+[Unit]
+Description=Asistente PDF (Flask + Cohere) con Gunicorn
+After=network.target
+
+[Service]
+Type=simple
+# Ajustá User/Group y las rutas a tu servidor. Se recomienda instalar
+# el proyecto fuera de /home/<usuario>/ si el server tiene SELinux
+# activo (por ejemplo en /opt/), porque SELinux puede bloquear la
+# lectura de EnvironmentFile en /home.
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/pdf-qa-assistant
+EnvironmentFile=/opt/pdf-qa-assistant/.env
+ExecStart=/opt/pdf-qa-assistant/venv/bin/gunicorn --bind 127.0.0.1:8000 --workers 2 app:app
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

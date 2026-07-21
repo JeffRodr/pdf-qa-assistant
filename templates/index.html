@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistente PDF</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1>Asistente de preguntas sobre PDFs</h1>
+      <span id="status-badge" class="badge">cargando…</span>
+    </header>
+
+    <main id="chat" class="chat"></main>
+
+    <form id="chat-form" class="chat-form">
+      <input
+        id="question-input"
+        type="text"
+        placeholder="Escribí tu pregunta sobre los documentos…"
+        autocomplete="off"
+        required
+      >
+      <button type="submit">Preguntar</button>
+    </form>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
