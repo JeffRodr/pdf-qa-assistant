@@ -1,0 +1,6 @@
+flask>=3.0
+pypdf>=4.0
+cohere>=5.4
+scikit-learn>=1.4
+python-dotenv>=1.0
+gunicorn>=21.2
